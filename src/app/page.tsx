@@ -6,6 +6,7 @@ import { PomodoroWidget } from "@/components/pomodoro-timer"
 import { WhatsOnYourMind } from "@/components/whats-on-your-mind"
 import { Onboarding } from "@/components/onboarding"
 import { SettingsDialog } from "@/components/settings-dialog"
+import { SoundPlayer } from "@/components/sound-player"
 
 export default function Home() {
   const [time, setTime] = React.useState<string>("")
@@ -94,7 +95,8 @@ export default function Home() {
         </footer>
 
         {/* Bottom Right: Pomodoro (Floating) */}
-        <div className="pointer-events-auto order-1 md:order-2 w-full md:w-auto flex justify-center md:justify-end">
+        <div className="pointer-events-auto order-1 md:order-2 w-full md:w-auto flex justify-center md:justify-end gap-4">
+             <SoundPlayer />
              <PomodoroWidget />
         </div>
       </div>
