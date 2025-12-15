@@ -50,11 +50,12 @@ export function DailyWidget() {
 
   if (!date) return null // Hydration fix
 
-  const formattedDate = date.toLocaleDateString("en-US", {
+  // Format date and strip accents for clean uppercase display (fixes Greek 'tonos' on caps)
+  const formattedDate = date.toLocaleDateString(undefined, {
     weekday: "long",
     month: "long",
     day: "numeric",
-  })
+  }).normalize("NFD").replace(/[\u0300-\u036f]/g, "")
 
   return (
     <div className="flex flex-col items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-1000">

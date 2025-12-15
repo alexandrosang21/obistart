@@ -13,7 +13,7 @@ export default function Home() {
     // Clock logic
     const updateTime = () => {
       const now = new Date()
-      setTime(now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false }))
+      setTime(now.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }))
       
       const hour = now.getHours()
       if (hour < 12) setGreeting("Good morning")
