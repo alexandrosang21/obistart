@@ -18,6 +18,8 @@ export function WhatsOnYourMind() {
   const [subtasks, setSubtasks] = React.useState<SubTask[]>([])
   const [newSubtask, setNewSubtask] = React.useState("")
   const [showSubtasks, setShowSubtasks] = React.useState(false)
+  const [editingSubtaskId, setEditingSubtaskId] = React.useState<string | null>(null)
+  const [editingSubtaskText, setEditingSubtaskText] = React.useState("")
 
   React.useEffect(() => {
     const savedFocus = localStorage.getItem("obistart-focus")
@@ -31,17 +33,28 @@ export function WhatsOnYourMind() {
       localStorage.removeItem("obistart-focus-completed")
       localStorage.removeItem("obistart-focus-date")
       localStorage.removeItem("obistart-subtasks")
+      setSubtasks([])
+      setFocus("")
       setIsEditing(true)
     } else {
-      if (savedFocus) {
+      if (savedFocus && savedFocus.trim().length > 0) {
         setFocus(savedFocus)
         setIsEditing(false)
+      } else {
+        setIsEditing(true)
       }
+      
       if (savedCompleted) {
         setIsCompleted(savedCompleted === "true")
       }
       if (savedSubtasks) {
-        setSubtasks(JSON.parse(savedSubtasks))
+        try {
+            const parsed = JSON.parse(savedSubtasks) as SubTask[]
+            setSubtasks(parsed.filter(t => t.text && t.text.trim().length > 0))
+        } catch (e) {
+            console.error("Failed to parse subtasks", e)
+            setSubtasks([])
+        }
       }
     }
   }, [])
@@ -102,6 +115,23 @@ export function WhatsOnYourMind() {
       saveSubtasks(updatedTasks)
   }
 
+  const startEditingSubtask = (task: SubTask) => {
+    setEditingSubtaskId(task.id)
+    setEditingSubtaskText(task.text)
+  }
+
+  const saveSubtaskEdit = (id: string) => {
+    if (editingSubtaskText.trim()) {
+      const updatedTasks = subtasks.map(t => 
+        t.id === id ? { ...t, text: editingSubtaskText } : t
+      )
+      saveSubtasks(updatedTasks)
+    } else {
+        deleteSubtask(id)
+    }
+    setEditingSubtaskId(null)
+  }
+
   if (isEditing) {
     return (
       <div className="w-full max-w-xl mx-auto text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -132,7 +162,7 @@ export function WhatsOnYourMind() {
                 <button 
                     onClick={toggleComplete}
                     className={`
-                    w-8 h-8 rounded-sm border-2 flex items-center justify-center transition-all duration-300
+                    w-8 h-8 rounded-sm border-2 flex items-center justify-center transition-all duration-300 flex-shrink-0
                     ${isCompleted 
                         ? "bg-primary border-primary text-primary-foreground" 
                         : "border-foreground/30 hover:border-foreground/60"
@@ -144,66 +174,95 @@ export function WhatsOnYourMind() {
                 
                 <span 
                     className={`
-                    text-3xl md:text-4xl font-medium transition-all duration-300
+                    text-2xl md:text-4xl font-medium transition-all duration-300 text-center
                     ${isCompleted ? "line-through text-muted-foreground decoration-2" : "text-foreground"}
                     `}
                 >
                     {focus}
                 </span>
                 
-                <div className="absolute -right-24 top-1/2 -translate-y-1/2 flex gap-2 opacity-0 group-hover/main:opacity-100 transition-opacity duration-200">
+                <div className="flex gap-1 opacity-0 group-hover/main:opacity-100 transition-opacity duration-200">
                     <Button variant="ghost" size="icon" onClick={() => setIsEditing(true)}>
-                    <Pencil className="w-4 h-4" />
+                      <Pencil className="w-4 h-4" />
                     </Button>
                     <Button variant="ghost" size="icon" onClick={clearFocus}>
-                    <X className="w-4 h-4" />
+                      <X className="w-4 h-4" />
                     </Button>
                 </div>
             </div>
        </div>
 
        {/* Subtasks Section */}
-       <div className="w-full max-w-md flex flex-col gap-2">
+       <div className="w-full max-w-lg flex flex-col gap-2">
             
             <div className="flex flex-col gap-2 w-full">
                 {subtasks.map(task => (
-                    <div key={task.id} className="group/item flex items-center gap-3 w-full p-1 animate-in slide-in-from-top-2 duration-300">
+                    <div key={task.id} className="group/item flex items-center gap-3 w-full p-2 rounded-md hover:bg-white/5 transition-colors animate-in slide-in-from-top-2 duration-300">
                         <button
                             onClick={() => toggleSubtask(task.id)}
                             className={`
-                                w-5 h-5 rounded-full border flex items-center justify-center transition-all duration-200
+                                w-5 h-5 rounded-full border flex items-center justify-center transition-all duration-200 flex-shrink-0
                                 ${task.completed ? "bg-muted-foreground border-muted-foreground text-background" : "border-foreground/20 hover:border-foreground/50"}
                             `}
                         >
                              {task.completed && <Check className="w-3 h-3" />}
                         </button>
-                        <span className={`flex-1 text-sm text-left ${task.completed ? "line-through text-muted-foreground" : ""}`}>
-                            {task.text}
-                        </span>
-                        <button 
-                            onClick={() => deleteSubtask(task.id)}
-                            className="opacity-0 group-hover/item:opacity-100 text-muted-foreground hover:text-destructive transition-all"
-                        >
-                            <X className="w-4 h-4" />
-                        </button>
+                        
+                        {editingSubtaskId === task.id ? (
+                             <form 
+                                className="flex-1"
+                                onSubmit={(e) => {
+                                    e.preventDefault()
+                                    saveSubtaskEdit(task.id)
+                                }}
+                             >
+                                <Input 
+                                    value={editingSubtaskText}
+                                    onChange={(e) => setEditingSubtaskText(e.target.value)}
+                                    className="h-8 py-1 px-2 text-sm"
+                                    autoFocus
+                                    onBlur={() => saveSubtaskEdit(task.id)}
+                                />
+                             </form>
+                        ) : (
+                            <span 
+                                className={`flex-1 text-base text-left transition-all ${task.completed ? "line-through text-muted-foreground" : "text-foreground/90"}`}
+                                onDoubleClick={() => startEditingSubtask(task)}
+                            >
+                                {task.text}
+                            </span>
+                        )}
+
+                        <div className="flex items-center gap-1 opacity-0 group-hover/item:opacity-100 transition-opacity">
+                            <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                className="h-6 w-6 text-muted-foreground hover:text-foreground"
+                                onClick={() => startEditingSubtask(task)}
+                            >
+                                <Pencil className="w-3 h-3" />
+                            </Button>
+                            <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                className="h-6 w-6 text-muted-foreground hover:text-destructive"
+                                onClick={() => deleteSubtask(task.id)}
+                            >
+                                <X className="w-3 h-3" />
+                            </Button>
+                        </div>
                     </div>
                 ))}
             </div>
 
-            {!showSubtasks && subtasks.length === 0 ? (
-                <Button variant="ghost" size="sm" onClick={() => setShowSubtasks(true)} className="text-muted-foreground/50 hover:text-muted-foreground self-center">
-                    + Add subtask
-                </Button>
-            ) : (
-                <form onSubmit={addSubtask} className="w-full mt-2">
-                     <Input 
-                        value={newSubtask}
-                        onChange={(e) => setNewSubtask(e.target.value)}
-                        placeholder="Add a step..."
-                        className="border-none bg-transparent shadow-none text-center placeholder:text-muted-foreground/30 focus-visible:ring-0"
-                     />
-                </form>
-            )}
+            <form onSubmit={addSubtask} className="w-full mt-2 px-2 transition-opacity duration-300 opacity-60 focus-within:opacity-100">
+                    <Input 
+                    value={newSubtask}
+                    onChange={(e) => setNewSubtask(e.target.value)}
+                    placeholder="+ Add a step..."
+                    className="border-none bg-transparent shadow-none text-left placeholder:text-muted-foreground/50 focus-visible:ring-0 px-9 py-2 h-auto"
+                    />
+            </form>
        </div>
     </div>
   )
