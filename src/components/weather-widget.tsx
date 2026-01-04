@@ -195,13 +195,16 @@ export function WeatherWidget() {
               <div className="grid grid-cols-3 gap-2 text-center">
                 {weather.daily.time.slice(1, 4).map((date, i) => {
                   const dayName = new Date(date).toLocaleDateString('en', { weekday: 'short' })
-                  const info = getWeatherInfo(weather.daily.weather_code[i + 1])
+                  const code = weather.daily?.weather_code?.[i + 1]
+                  const temp = weather.daily?.temperature_2m_max?.[i + 1]
+                  if (code === undefined || temp === undefined) return null
+                  const info = getWeatherInfo(code)
                   return (
                     <div key={i} className="flex flex-col items-center gap-1">
                       <span className="text-[10px] opacity-50">{dayName}</span>
                       {info.icon}
                       <span className="text-[10px]">
-                        {Math.round(weather.daily.temperature_2m_max[i + 1])}°
+                        {Math.round(temp)}°
                       </span>
                     </div>
                   )
