@@ -7,6 +7,7 @@ import { WhatsOnYourMind } from "@/components/whats-on-your-mind"
 import { Onboarding } from "@/components/onboarding"
 import { SettingsDialog } from "@/components/settings-dialog"
 import { SoundPlayer } from "@/components/sound-player"
+import { DailyNews } from "@/components/daily-news"
 
 export default function Home() {
   const [time, setTime] = React.useState<string>("")
@@ -86,18 +87,19 @@ export default function Home() {
       </main>
 
       {/* Bottom Section: Timer and Footer */}
-      <div className="absolute bottom-0 w-full p-6 flex flex-col md:flex-row items-end justify-between gap-4 z-20 pointer-events-none">
-        
-        {/* Bottom Left: Footer & Settings */}
-        <footer className="text-xs text-muted-foreground/40 pointer-events-auto order-2 md:order-1 flex items-center gap-4">
+      <div className="absolute bottom-0 w-full p-6 z-20 pointer-events-none">
+        <div className="flex flex-col items-center gap-3 md:flex-row md:justify-between">
+          <DailyNews className="md:flex-1" />
+
+          <footer className="text-xs text-muted-foreground/40 pointer-events-auto flex items-center gap-4 order-3 md:-order-1">
             <SettingsDialog currentName={userName} onNameChange={handleNameChange} />
             <span>Obistart &copy; {new Date().getFullYear()}</span>
-        </footer>
+          </footer>
 
-        {/* Bottom Right: Pomodoro (Floating) */}
-        <div className="pointer-events-auto order-1 md:order-2 w-full md:w-auto flex justify-center md:justify-end gap-4">
-             <SoundPlayer />
-             <PomodoroWidget />
+          <div className="pointer-events-auto flex gap-4 order-2">
+            <SoundPlayer />
+            <PomodoroWidget />
+          </div>
         </div>
       </div>
 
