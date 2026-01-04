@@ -8,6 +8,7 @@ import { Onboarding } from "@/components/onboarding"
 import { SettingsDialog } from "@/components/settings-dialog"
 import { SoundPlayer } from "@/components/sound-player"
 import { DailyNews } from "@/components/daily-news"
+import { WeatherWidget } from "@/components/weather-widget"
 
 export default function Home() {
   const [time, setTime] = React.useState<string>("")
@@ -53,7 +54,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden bg-background text-foreground transition-colors duration-500 selection:bg-primary/20">
+    <div className="min-h-screen w-full relative overflow-x-hidden bg-background text-foreground transition-colors duration-500 selection:bg-primary/20">
       
       {/* Background Ambience */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -65,6 +66,11 @@ export default function Home() {
       <header className="absolute top-0 left-0 w-full p-6 flex justify-center items-start z-20">
         <DailyWidget />
       </header>
+
+      {/* Weather Widget - Top Right */}
+      <div className="absolute top-6 right-6 z-20 pointer-events-auto">
+        <WeatherWidget />
+      </div>
 
       {/* Main Center Content: Time, Greeting, Focus */}
       <main className="z-10 absolute inset-0 flex flex-col items-center justify-center gap-8 p-4">

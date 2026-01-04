@@ -22,7 +22,7 @@ const SPECIAL_DAYS: Record<string, string> = {
   // Add more as needed or fetch from API
 }
 
-const QUOTES = [
+const FALLBACK_QUOTES = [
   "The best way to predict the future is to create it.",
   "Focus on being productive instead of busy.",
   "Do one thing every day that scares you.",
@@ -34,18 +34,42 @@ export function DailyWidget() {
   const [date, setDate] = React.useState<Date | null>(null)
   const [specialDay, setSpecialDay] = React.useState<string | null>(null)
   const [quote, setQuote] = React.useState("")
+  const [author, setAuthor] = React.useState<string | null>(null)
 
   React.useEffect(() => {
     const now = new Date()
     setDate(now)
-    
+
     // Check for special day
     const dayKey = `${now.getMonth() + 1}-${now.getDate()}`
     setSpecialDay(SPECIAL_DAYS[dayKey] || null)
 
-    // Random quote based on day (deterministic per day)
-    const quoteIndex = (now.getDate() + now.getMonth()) % QUOTES.length
-    setQuote(QUOTES[quoteIndex])
+    // Fetch quote from API
+    const fetchQuote = async () => {
+      try {
+        // Try the /random endpoint
+        const response = await fetch("https://api.quotable.io/random?tags=motivational,inspirational")
+        if (response.ok) {
+          const data = await response.json()
+          // API returns an array, get first item
+          const quoteData = Array.isArray(data) ? data[0] : data
+          if (quoteData?.content) {
+            setQuote(quoteData.content)
+            setAuthor(quoteData.author)
+            return
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch quote:", error)
+      }
+
+      // Fallback to local quotes
+      const quoteIndex = (now.getDate() + now.getMonth()) % FALLBACK_QUOTES.length
+      setQuote(FALLBACK_QUOTES[quoteIndex])
+      setAuthor(null)
+    }
+
+    fetchQuote()
   }, [])
 
   if (!date) return null // Hydration fix
@@ -80,9 +104,12 @@ export function DailyWidget() {
         </TooltipProvider>
       )}
 
-      {!specialDay && (
-         <div className="text-muted-foreground/60 text-sm italic">
+      {!specialDay && quote && (
+         <div className="text-muted-foreground/60 text-sm italic text-center max-w-md">
            &quot;{quote}&quot;
+           {author && (
+             <span className="not-italic opacity-50 block text-xs mt-1">— {author}</span>
+           )}
          </div>
       )}
     </div>
