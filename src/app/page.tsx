@@ -88,8 +88,8 @@ export default function Home() {
 
       {/* Bottom Section: Timer and Footer */}
       <div className="absolute bottom-0 w-full p-6 z-20 pointer-events-none">
-        <div className="flex flex-col items-center gap-3 md:flex-row md:justify-between">
-          <DailyNews className="md:flex-1" />
+        <div className="flex flex-col items-end gap-3 md:flex-row md:justify-between">
+          <DailyNews />
 
           <footer className="text-xs text-muted-foreground/40 pointer-events-auto flex items-center gap-4 order-3 md:-order-1">
             <SettingsDialog currentName={userName} onNameChange={handleNameChange} />
