@@ -9,6 +9,7 @@ import { SettingsDialog } from "@/components/settings-dialog"
 import { SoundPlayer } from "@/components/sound-player"
 import { DailyNews } from "@/components/daily-news"
 import { WeatherWidget } from "@/components/weather-widget"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function Home() {
   const [time, setTime] = React.useState<string>("")
@@ -54,7 +55,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen w-full relative overflow-x-hidden bg-background text-foreground transition-colors duration-500 selection:bg-primary/20">
+    <div className="h-screen w-full relative overflow-hidden bg-background text-foreground transition-colors duration-500 selection:bg-primary/20">
       
       {/* Background Ambience */}
       <div className="absolute inset-0 z-0 pointer-events-none">
@@ -67,9 +68,14 @@ export default function Home() {
         <DailyWidget />
       </header>
 
-      {/* Weather Widget - Top Right */}
-      <div className="absolute top-6 right-6 z-20 pointer-events-auto">
+      {/* Weather Widget - Top Left */}
+      <div className="absolute top-6 left-6 z-20 pointer-events-auto">
         <WeatherWidget />
+      </div>
+
+      {/* Theme Toggle - Top Right */}
+      <div className="absolute top-6 right-6 z-20 pointer-events-auto">
+        <ThemeToggle />
       </div>
 
       {/* Main Center Content: Time, Greeting, Focus */}

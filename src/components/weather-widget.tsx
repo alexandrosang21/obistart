@@ -147,7 +147,7 @@ export function WeatherWidget() {
       </div>
 
       {searchOpen && (
-        <div className="fixed top-14 right-6 w-64 bg-background border rounded-lg shadow-lg p-3 z-50 max-h-[80vh] overflow-y-auto">
+        <div className="fixed top-14 left-6 w-64 bg-background border rounded-lg shadow-lg p-3 z-50 max-h-[80vh] overflow-y-auto">
           <div className="flex items-center gap-2 mb-2">
             <div className="relative flex-1">
               <Search className="w-3 h-3 absolute left-2 top-1/2 -translate-y-1/2 opacity-50" />
