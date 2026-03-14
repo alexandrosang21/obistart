@@ -6,7 +6,7 @@
 
 A minimal, distraction-free new tab page that helps you start every day with focus and intention.
 
-[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-start.angelov.gr-blue?style=for-the-badge)](https://start.angelov.gr)
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-obistart.vercel.app-blue?style=for-the-badge)](https://obistart.vercel.app)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
