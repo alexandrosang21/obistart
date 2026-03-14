@@ -12,9 +12,52 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://obistart.vercel.app"
+const siteName = "Obistart"
+const siteDescription =
+  "A minimal, distraction-free browser start page. Focus on what matters with a daily planner, Pomodoro timer, ambient sounds, and curated tech news — all in one beautiful new tab."
+
 export const metadata: Metadata = {
-  title: "Obistart",
-  description: "Your focus-driven daily dashboard",
+  title: {
+    default: "Obistart — Your Mindful Browser Start Page",
+    template: "%s | Obistart",
+  },
+  description: siteDescription,
+  keywords: [
+    "new tab page",
+    "start page",
+    "browser homepage",
+    "productivity",
+    "focus",
+    "pomodoro timer",
+    "daily planner",
+    "ambient sounds",
+    "distraction free",
+    "minimal dashboard",
+  ],
+  authors: [{ name: "Alexandros Angelov" }],
+  creator: "Alexandros Angelov",
+  metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    siteName,
+    title: "Obistart — Your Mindful Browser Start Page",
+    description: siteDescription,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Obistart — Your Mindful Browser Start Page",
+    description: siteDescription,
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
+  manifest: "/manifest.json",
 };
 
 import { ThemeProvider } from "@/components/theme-provider"
