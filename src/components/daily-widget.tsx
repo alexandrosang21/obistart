@@ -22,12 +22,27 @@ const SPECIAL_DAYS: Record<string, string> = {
   // Add more as needed or fetch from API
 }
 
-const FALLBACK_QUOTES = [
-  "The best way to predict the future is to create it.",
-  "Focus on being productive instead of busy.",
-  "Do one thing every day that scares you.",
-  "Your time is limited, so don't waste it living someone else's life.",
-  "Simplicity is the ultimate sophistication."
+const QUOTES = [
+  { text: "The best way to predict the future is to create it.", author: "Peter Drucker" },
+  { text: "Focus on being productive instead of busy.", author: "Tim Ferriss" },
+  { text: "Do one thing every day that scares you.", author: "Eleanor Roosevelt" },
+  { text: "Your time is limited, so don't waste it living someone else's life.", author: "Steve Jobs" },
+  { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" },
+  { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
+  { text: "It always seems impossible until it's done.", author: "Nelson Mandela" },
+  { text: "Strive not to be a success, but rather to be of value.", author: "Albert Einstein" },
+  { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+  { text: "What you do today can improve all your tomorrows.", author: "Ralph Marston" },
+  { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
+  { text: "Everything you've ever wanted is on the other side of fear.", author: "George Addair" },
+  { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+  { text: "Act as if what you do makes a difference. It does.", author: "William James" },
+  { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", author: "Winston Churchill" },
+  { text: "In the middle of every difficulty lies opportunity.", author: "Albert Einstein" },
+  { text: "Start where you are. Use what you have. Do what you can.", author: "Arthur Ashe" },
+  { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+  { text: "You are never too old to set another goal or to dream a new dream.", author: "C.S. Lewis" },
+  { text: "What we achieve inwardly will change outer reality.", author: "Plutarch" },
 ]
 
 export function DailyWidget() {
@@ -44,32 +59,11 @@ export function DailyWidget() {
     const dayKey = `${now.getMonth() + 1}-${now.getDate()}`
     setSpecialDay(SPECIAL_DAYS[dayKey] || null)
 
-    // Fetch quote from API
-    const fetchQuote = async () => {
-      try {
-        // Try the /random endpoint
-        const response = await fetch("https://api.quotable.io/random?tags=motivational,inspirational")
-        if (response.ok) {
-          const data = await response.json()
-          // API returns an array, get first item
-          const quoteData = Array.isArray(data) ? data[0] : data
-          if (quoteData?.content) {
-            setQuote(quoteData.content)
-            setAuthor(quoteData.author)
-            return
-          }
-        }
-      } catch (error) {
-        console.error("Failed to fetch quote:", error)
-      }
-
-      // Fallback to local quotes
-      const quoteIndex = (now.getDate() + now.getMonth()) % FALLBACK_QUOTES.length
-      setQuote(FALLBACK_QUOTES[quoteIndex])
-      setAuthor(null)
-    }
-
-    fetchQuote()
+    // Pick a quote based on the day (rotates daily)
+    const quoteIndex = (now.getFullYear() * 366 + now.getMonth() * 31 + now.getDate()) % QUOTES.length
+    const selected = QUOTES[quoteIndex]
+    setQuote(selected.text)
+    setAuthor(selected.author)
   }, [])
 
   if (!date) return null // Hydration fix
