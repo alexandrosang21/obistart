@@ -63,7 +63,7 @@ Most browser start pages are cluttered with ads, trending articles, and distract
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/obistart.git
+git clone https://github.com/alexandrosang21/obistart.git
 cd obistart
 
 # Install dependencies
@@ -111,7 +111,7 @@ Obistart is built with privacy as a core principle:
 
 Deploy your own instance in one click:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/obistart)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/alexandrosang21/obistart)
 
 Or build manually:
 
