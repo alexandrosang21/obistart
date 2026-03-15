@@ -35,6 +35,7 @@ Most browser start pages are cluttered with ads, trending articles, and distract
 | ⏱️ **Pomodoro Timer** | Built-in focus timer with customizable sessions |
 | 🎵 **Sound Player** | Ambient sounds and radio streams for deep work |
 | 📅 **Daily Widget** | Motivational quotes and special day celebrations |
+| ⛅ **Weather Widget** | Real-time weather with location search |
 | 🌗 **Dark / Light Theme** | Automatic theme switching with manual override |
 | 🔒 **Privacy First** | All data stored locally in your browser — nothing leaves your machine |
 
@@ -142,7 +143,7 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 <div align="center">
 
-**[🌐 start.angelov.gr](https://start.angelov.gr)**
+**[🌐 obistart.vercel.app](https://obistart.vercel.app)**
 
 Made with ☕ and intention.
 
